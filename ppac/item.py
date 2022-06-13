@@ -14,23 +14,25 @@ import json
 class DateTimeEncoder(json.JSONEncoder):
     """Class to convert datetime/date to string for serialization."""
 
-    def default(self, obj):
-        if isinstance(obj, (date, datetime)):
-            return datetime_to_str(obj)
+    def default(self, o):
+        if isinstance(o, (date, datetime)):
+            return datetime_to_str(o)
+
+        return o
 
 
 def decode_date(value_dict):
     """Function to convert string to datetime for deserialization."""
-    for k, v in value_dict.items():
-        if k.endswith('_date') and v:
-            value_dict[k] = str_to_datetime(v)
+    for k_item, v_item in value_dict.items():
+        if k_item.endswith('_date') and v_item:
+            value_dict[k_item] = str_to_datetime(v_item)
     return value_dict
 
 
 @dataclass
 class Item:
     """Plannig item for project planning as code."""
-    id: str
+    id: str  # pylint: disable=C0103
     due_date: datetime = None
     start_date: datetime = None
     end_date: datetime = None
