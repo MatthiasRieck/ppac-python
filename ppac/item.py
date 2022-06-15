@@ -1,3 +1,7 @@
+"""
+Planning item for project config as code.
+"""
+
 from dataclasses import dataclass
 import dataclasses
 from datetime import datetime, date
@@ -8,21 +12,27 @@ import json
 
 
 class DateTimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (date, datetime)):
-            return datetime_to_str(obj)
+    """Class to convert datetime/date to string for serialization."""
+
+    def default(self, o):
+        if isinstance(o, (date, datetime)):
+            return datetime_to_str(o)
+
+        return o
 
 
 def decode_date(value_dict):
-    for k, v in value_dict.items():
-        if k.endswith('_date') and v:
-            value_dict[k] = str_to_datetime(v)
+    """Function to convert string to datetime for deserialization."""
+    for k_item, v_item in value_dict.items():
+        if k_item.endswith('_date') and v_item:
+            value_dict[k_item] = str_to_datetime(v_item)
     return value_dict
 
 
 @dataclass
 class Item:
-    id: str
+    """Plannig item for project planning as code."""
+    id: str  # pylint: disable=C0103
     due_date: datetime = None
     start_date: datetime = None
     end_date: datetime = None
